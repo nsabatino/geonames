@@ -1,4 +1,4 @@
-package geonames
+package handlers
 
 const languageCodesURL = `iso-languagecodes.txt`
 

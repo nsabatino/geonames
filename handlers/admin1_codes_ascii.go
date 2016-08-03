@@ -1,23 +1,23 @@
-package geonames
+package handlers
 
 import "strconv"
 
-const admin2CodesURL = `admin2Codes.txt`
+const admin1CodesASCIIURL = `admin1CodesASCII.txt`
 
-// Admin2Code represents a single admin2 code encoded in ASCII
-type Admin2Code struct {
+// Admin1CodeASCII represents a single admin1 code encoded in ASCII
+type Admin1CodeASCII struct {
 	Codes     string
 	Name      string
 	ASCIIName string
 	GeonameID int64
 }
 
-// Admin2Codes returns all admin2 codes encoded in ASCII
-func Admin2Codes() ([]*Admin2Code, error) {
+// Admin1CodesASCII returns all admin1 codes encoded in ASCII
+func Admin1CodesASCII() ([]*Admin1CodeASCII, error) {
 	var err error
-	var result []*Admin2Code
+	var result []*Admin1CodeASCII
 
-	data, err := httpGet(geonamesURL + admin2CodesURL)
+	data, err := httpGet(helpers.GeonamesURL + admin1CodesASCIIURL)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func Admin2Codes() ([]*Admin2Code, error) {
 
 		geonameID, _ := strconv.ParseInt(string(raw[3]), 10, 64)
 
-		result = append(result, &Admin2Code{
+		result = append(result, &Admin1CodeASCII{
 			Codes:     string(raw[0]),
 			Name:      string(raw[1]),
 			ASCIIName: string(raw[2]),

@@ -1,4 +1,4 @@
-package geonames
+package handlers
 
 import (
 	"archive/zip"
@@ -10,6 +10,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const allCountriesURI = `allCountries.zip`
@@ -18,16 +20,16 @@ const allCountriesURI = `allCountries.zip`
 func AllCountries() (map[int]*Feature, error) {
 	var err error
 	result := make(map[int]*Feature)
-	url := fmt.Sprintf("%s%s", geonamesURL, allCountriesURI)
+	url := fmt.Sprintf("%s%s", helpers.GeonamesURL, allCountriesURI)
 
-	dat, err := httpGetNew(url)
+	dat, err := helpers.HTTPGetNew(url)
 	if err != nil {
 		return nil, err
 	}
 
-	tempPath := getTempPath(allCountriesURI)
+	tempPath := helpers.GetTempPath(allCountriesURI)
 
-	f, err := writeToFile(tempPath, dat)
+	f, err := helpers.WriteToFile(tempPath, dat)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +61,7 @@ func AllCountries() (map[int]*Feature, error) {
 		return nil, errors.New("unknown error")
 	}
 
-	sParse(s, 0, func(raw []string) bool {
+	helpers.StringParse(s, 0, func(raw []string) bool {
 		if len(raw) != 19 {
 			return true
 		}

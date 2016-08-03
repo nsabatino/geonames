@@ -1,4 +1,4 @@
-package geonames
+package handlers
 
 import (
 	"errors"

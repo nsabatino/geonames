@@ -1,4 +1,4 @@
-package geonames
+package helpers
 
 import (
 	"archive/zip"
@@ -16,19 +16,23 @@ import (
 )
 
 const (
-	geonamesURL   = "http://download.geonames.org/export/dump/"
+	// GeonamesURL is the main geonames dump url
+	GeonamesURL   = "http://download.geonames.org/export/dump/"
 	commentSymbol = byte('#')
 	newLineSymbol = byte('\n')
 	delimSymbol   = byte('\t')
-	boolTrue      = "1"
+	// BoolTrue ...
+	BoolTrue = "1"
 )
 
-func getTempPath(name string) string {
+// GetTempPath ...
+func GetTempPath(name string) string {
 	tempDir := os.TempDir()
 	return path.Join(tempDir, name)
 }
 
-func writeToFile(fileName string, data io.ReadCloser) (*os.File, error) {
+// WriteToFile ...
+func WriteToFile(fileName string, data io.ReadCloser) (*os.File, error) {
 	file, err := os.Create(fileName)
 	if err != nil {
 		return nil, err
@@ -103,7 +107,8 @@ func getRaw(url, name string) (*bufio.Scanner, error) {
 	return result, nil
 }
 
-func httpGet(url string) ([]byte, error) {
+// HTTPGet returns contents of url in a byte slice
+func HTTPGet(url string) ([]byte, error) {
 	var err error
 	resp, err := http.Get(url)
 	if err != nil {
@@ -113,7 +118,8 @@ func httpGet(url string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func httpGetNew(url string) (io.ReadCloser, error) {
+// HTTPGetNew ...
+func HTTPGetNew(url string) (io.ReadCloser, error) {
 	var err error
 	resp, err := http.Get(url)
 	if err != nil {
@@ -122,7 +128,8 @@ func httpGetNew(url string) (io.ReadCloser, error) {
 	return resp.Body, nil
 }
 
-func unzip(data []byte) ([]*zip.File, error) {
+// Unzip ...
+func Unzip(data []byte) ([]*zip.File, error) {
 	var err error
 
 	r, err := zip.NewReader(bytes.NewReader(data), (int64)(len(data)))
@@ -133,7 +140,8 @@ func unzip(data []byte) ([]*zip.File, error) {
 	return r.File, nil
 }
 
-func getZipData(files []*zip.File, name string) ([]byte, error) {
+// GetZipData ...
+func GetZipData(files []*zip.File, name string) ([]byte, error) {
 	var result []byte
 
 	for _, f := range files {
@@ -154,7 +162,8 @@ func getZipData(files []*zip.File, name string) ([]byte, error) {
 	return result, nil
 }
 
-func sParse(s *bufio.Scanner, headerLength uint, f func([]string) bool) {
+// StringParse ...
+func StringParse(s *bufio.Scanner, headerLength uint, f func([]string) bool) {
 	var err error
 	var line string
 	var rawSplit []string
@@ -180,7 +189,8 @@ func sParse(s *bufio.Scanner, headerLength uint, f func([]string) bool) {
 	}
 }
 
-func parse(data []byte, headerLength int, f func([][]byte) bool) {
+// Parse ...
+func Parse(data []byte, headerLength int, f func([][]byte) bool) {
 	rawSplit := bytes.Split(data, []byte{newLineSymbol})
 	var rawLineSplit [][]byte
 	for i := range rawSplit {

@@ -1,38 +1,17 @@
-package geonames
+package handlers
 
-import "strconv"
+import (
+	"strconv"
 
-const countryInfoURL = "countryInfo.txt"
-
-// Country represents a single country
-type Country struct {
-	Iso2Code           string  // ISO
-	Iso3Code           string  // ISO3
-	IsoNumeric         string  // ISO-Numeric
-	Fips               string  // fips
-	Name               string  // Country
-	Capital            string  // Capital
-	Area               float64 // Area(in sq km)
-	Population         uint64  // Population
-	Continent          string  // Continent
-	Tld                string  // tld
-	CurrencyCode       string  // CurrencyCode
-	CurrencyName       string  // CurrencyName
-	Phone              string  // Phone
-	PostalCodeFormat   string  // Postal Code Format
-	PostalCodeRegex    string  // Postal Code Regex
-	Languages          string  // Languages
-	GeonameID          int64   // geonameid
-	Neighbours         string  // neighbours
-	EquivalentFipsCode string  // EquivalentFipsCode
-}
+	"github.com/remizovm/geonames/types"
+)
 
 // CountryInfo returns a map of all countries
-func CountryInfo() (map[int64]*Country, error) {
+func CountryInfo(url string) (map[int64]*types.Country, error) {
 	var err error
-	result := make(map[int64]*Country)
+	result := make(map[int64]*types.Country)
 
-	data, err := httpGet(geonamesURL + countryInfoURL)
+	data, err := httpGet(url)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +25,7 @@ func CountryInfo() (map[int64]*Country, error) {
 		population, _ := strconv.ParseUint(string(raw[7]), 10, 64)
 		geonameID, _ := strconv.ParseInt(string(raw[16]), 10, 64)
 
-		result[geonameID] = &Country{
+		result[geonameID] = &types.Country{
 			Iso2Code:           string(raw[0]),
 			Iso3Code:           string(raw[1]),
 			IsoNumeric:         string(raw[2]),

@@ -1,4 +1,4 @@
-package geonames
+package handlers
 
 import (
 	"strconv"
@@ -6,14 +6,14 @@ import (
 	"time"
 )
 
-const cities1000URL = `cities1000.zip`
+const cities5000URL = `cities5000.zip`
 
-// Cities1000 returns all cities with the population >1000
-func Cities1000() (map[int]*Feature, error) {
+// Cities5000 returns all cities with the population >5000
+func Cities5000() (map[int]*Feature, error) {
 	var err error
 	result := make(map[int]*Feature)
 
-	zipped, err := httpGet(geonamesURL + cities1000URL)
+	zipped, err := httpGet(geonamesURL + cities5000URL)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +23,7 @@ func Cities1000() (map[int]*Feature, error) {
 		return nil, err
 	}
 
-	data, err := getZipData(f, "cities1000.txt")
+	data, err := getZipData(f, "cities5000.txt")
 	if err != nil {
 		return nil, err
 	}

@@ -1,8 +1,10 @@
-package geonames
+package handlers
 
 import (
 	"log"
 	"strconv"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const alternateNamesURL = `alternateNames.zip`
@@ -24,22 +26,22 @@ func AlternateNames() ([]*AlternateName, error) {
 	var err error
 	var result []*AlternateName
 
-	zipped, err := httpGet(geonamesURL + alternateNamesURL)
+	zipped, err := helpers.HTTPGet(helpers.GeonamesURL + alternateNamesURL)
 	if err != nil {
 		return nil, err
 	}
 
-	files, err := unzip(zipped)
+	files, err := helpers.Unzip(zipped)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := getZipData(files, "alternateNames.txt")
+	data, err := helpers.GetZipData(files, "alternateNames.txt")
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 8 {
 			return true
 		}
@@ -64,10 +66,10 @@ func AlternateNames() ([]*AlternateName, error) {
 			GeonameID:       geonameID,
 			IsoLanguage:     string(raw[2]),
 			Name:            string(raw[3]),
-			IsPreferredName: string(raw[4]) == boolTrue,
-			IsShortName:     string(raw[5]) == boolTrue,
-			IsColloquial:    string(raw[6]) == boolTrue,
-			IsHistoric:      string(raw[7]) == boolTrue,
+			IsPreferredName: string(raw[4]) == helpers.BoolTrue,
+			IsShortName:     string(raw[5]) == helpers.BoolTrue,
+			IsColloquial:    string(raw[6]) == helpers.BoolTrue,
+			IsHistoric:      string(raw[7]) == helpers.BoolTrue,
 		})
 
 		return true
