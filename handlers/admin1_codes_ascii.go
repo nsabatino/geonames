@@ -4,22 +4,15 @@ import (
 	"strconv"
 
 	"github.com/remizovm/geonames/helpers"
+	"github.com/remizovm/geonames/types"
 )
 
 const admin1CodesASCIIURL = `admin1CodesASCII.txt`
 
-// Admin1CodeASCII represents a single admin1 code encoded in ASCII
-type Admin1CodeASCII struct {
-	Codes     string
-	Name      string
-	ASCIIName string
-	GeonameID int64
-}
-
 // Admin1CodesASCII returns all admin1 codes encoded in ASCII
-func Admin1CodesASCII() ([]*Admin1CodeASCII, error) {
+func Admin1CodesASCII() ([]*types.Admin1CodeASCII, error) {
 	var err error
-	var result []*Admin1CodeASCII
+	var result []*types.Admin1CodeASCII
 
 	data, err := helpers.HTTPGet(helpers.GeonamesURL + admin1CodesASCIIURL)
 	if err != nil {
@@ -33,7 +26,7 @@ func Admin1CodesASCII() ([]*Admin1CodeASCII, error) {
 
 		geonameID, _ := strconv.ParseInt(string(raw[3]), 10, 64)
 
-		result = append(result, &Admin1CodeASCII{
+		result = append(result, &types.Admin1CodeASCII{
 			Codes:     string(raw[0]),
 			Name:      string(raw[1]),
 			ASCIIName: string(raw[2]),
