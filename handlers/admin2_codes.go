@@ -23,7 +23,7 @@ func Admin2Codes() ([]*Admin2Code, error) {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 4 {
 			return true
 		}

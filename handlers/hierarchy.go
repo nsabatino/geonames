@@ -3,6 +3,8 @@ package handlers
 import (
 	"log"
 	"strconv"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const hierarchyURL = `hierarchy.zip`
@@ -21,22 +23,22 @@ func Hierarchy() (map[int][]*HierarchyNode, error) {
 	var err error
 	result := make(map[int][]*HierarchyNode)
 
-	zipped, err := httpGet(geonamesURL + hierarchyURL)
+	zipped, err := helpers.HTTPGet(helpers.GeonamesURL + hierarchyURL)
 	if err != nil {
 		return nil, err
 	}
 
-	f, err := unzip(zipped)
+	f, err := helpers.Unzip(zipped)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := getZipData(f, "hierarchy.txt")
+	data, err := helpers.GetZipData(f, "hierarchy.txt")
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 3 {
 			return true
 		}

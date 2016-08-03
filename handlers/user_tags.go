@@ -3,6 +3,8 @@ package handlers
 import (
 	"log"
 	"strconv"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const userTagsURL = `userTags.zip`
@@ -11,23 +13,23 @@ const userTagsURL = `userTags.zip`
 func UserTags() (map[int][]string, error) {
 	var err error
 
-	zipped, err := httpGet(geonamesURL + userTagsURL)
+	zipped, err := helpers.HTTPGet(helpers.GeonamesURL + userTagsURL)
 	if err != nil {
 		return nil, err
 	}
 
-	unzipped, err := unzip(zipped)
+	unzipped, err := helpers.Unzip(zipped)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := getZipData(unzipped, "userTags.txt")
+	data, err := helpers.GetZipData(unzipped, "userTags.txt")
 	if err != nil {
 		return nil, err
 	}
 
 	result := make(map[int][]string)
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 2 {
 			return true
 		}

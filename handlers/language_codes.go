@@ -1,5 +1,7 @@
 package handlers
 
+import "github.com/remizovm/geonames/helpers"
+
 const languageCodesURL = `iso-languagecodes.txt`
 
 // LanguageCode represents a single language
@@ -15,12 +17,12 @@ func LanguageCodes() ([]*LanguageCode, error) {
 	var err error
 	var result []*LanguageCode
 
-	data, err := httpGet(geonamesURL + languageCodesURL)
+	data, err := helpers.HTTPGet(helpers.GeonamesURL + languageCodesURL)
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 1, func(raw [][]byte) bool {
+	helpers.Parse(data, 1, func(raw [][]byte) bool {
 		if len(raw) != 4 {
 			return true
 		}

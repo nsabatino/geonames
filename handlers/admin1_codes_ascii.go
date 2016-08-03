@@ -1,6 +1,10 @@
 package handlers
 
-import "strconv"
+import (
+	"strconv"
+
+	"github.com/remizovm/geonames/helpers"
+)
 
 const admin1CodesASCIIURL = `admin1CodesASCII.txt`
 
@@ -17,12 +21,12 @@ func Admin1CodesASCII() ([]*Admin1CodeASCII, error) {
 	var err error
 	var result []*Admin1CodeASCII
 
-	data, err := httpGet(helpers.GeonamesURL + admin1CodesASCIIURL)
+	data, err := helpers.HTTPGet(helpers.GeonamesURL + admin1CodesASCIIURL)
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 4 {
 			return true
 		}

@@ -3,6 +3,8 @@ package handlers
 import (
 	"strconv"
 	"time"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const timeZonesURL = `timeZones.txt`
@@ -21,12 +23,12 @@ func TimeZones() ([]*TimeZone, error) {
 	var err error
 	var result []*TimeZone
 
-	data, err := httpGet(geonamesURL + timeZonesURL)
+	data, err := helpers.HTTPGet(helpers.GeonamesURL + timeZonesURL)
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 1, func(raw [][]byte) bool {
+	helpers.Parse(data, 1, func(raw [][]byte) bool {
 		if len(raw) != 5 {
 			return true
 		}

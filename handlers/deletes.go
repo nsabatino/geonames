@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const deletesURL = `deletes-%d-%02d-%02d.txt`
@@ -20,13 +22,13 @@ func Deletes(year, month, day int) (map[int]*DeleteOp, error) {
 	var err error
 	uri := fmt.Sprintf(deletesURL, year, month, day)
 
-	data, err := httpGet(geonamesURL + uri)
+	data, err := helpers.HTTPGet(helpers.GeonamesURL + uri)
 	if err != nil {
 		return nil, err
 	}
 
 	result := make(map[int]*DeleteOp)
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 3 {
 			return true
 		}

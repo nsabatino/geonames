@@ -3,6 +3,7 @@ package handlers
 import (
 	"strconv"
 
+	"github.com/remizovm/geonames/helpers"
 	"github.com/remizovm/geonames/types"
 )
 
@@ -11,12 +12,12 @@ func CountryInfo(url string) (map[int64]*types.Country, error) {
 	var err error
 	result := make(map[int64]*types.Country)
 
-	data, err := httpGet(url)
+	data, err := helpers.HTTPGet(url)
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 19 {
 			return true
 		}

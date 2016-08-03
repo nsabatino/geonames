@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const modificationsURL = `modifications-%d-%02d-%02d.txt`
@@ -14,7 +16,7 @@ const modificationsPattern = `(\d{1,7})\s(.+)`
 func Modifications(year, month, day int) (map[string][]string, error) {
 	uri := fmt.Sprintf(modificationsURL, year, month, day)
 
-	data, err := httpGet(geonamesURL + uri)
+	data, err := helpers.HTTPGet(helpers.GeonamesURL + uri)
 	if err != nil {
 		return nil, err
 	}

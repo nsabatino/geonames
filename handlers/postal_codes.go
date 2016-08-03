@@ -6,6 +6,8 @@ import (
 	"log"
 	"strconv"
 	"strings"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const postalCodesURL = `http://download.geonames.org/export/zip/%s.zip`
@@ -36,22 +38,22 @@ func PostalCodes(iso2code string) (map[string]*PostalCode, error) {
 	}
 
 	url := fmt.Sprintf(postalCodesURL, strings.ToUpper(iso2code))
-	zipped, err := httpGet(url)
+	zipped, err := helpers.HTTPGet(url)
 	if err != nil {
 		return nil, err
 	}
 
-	f, err := unzip(zipped)
+	f, err := helpers.Unzip(zipped)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := getZipData(f, strings.ToUpper(iso2code)+".txt")
+	data, err := helpers.GetZipData(f, strings.ToUpper(iso2code)+".txt")
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 12 {
 			return true
 		}

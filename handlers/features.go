@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 // Feature represents a single administrative object - for example, a city
@@ -40,23 +42,23 @@ func Features(iso2code string) ([]*Feature, error) {
 		return nil, errors.New("Invalid iso2code")
 	}
 
-	uri := fmt.Sprintf("%s%s.zip", geonamesURL, strings.ToUpper(iso2code))
-	zipped, err := httpGet(uri)
+	uri := fmt.Sprintf("%s%s.zip", helpers.GeonamesURL, strings.ToUpper(iso2code))
+	zipped, err := helpers.HTTPGet(uri)
 	if err != nil {
 		return nil, err
 	}
 
-	f, err := unzip(zipped)
+	f, err := helpers.Unzip(zipped)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := getZipData(f, strings.ToUpper(iso2code)+".txt")
+	data, err := helpers.GetZipData(f, strings.ToUpper(iso2code)+".txt")
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 19 {
 			return true
 		}

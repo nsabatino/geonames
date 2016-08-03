@@ -4,6 +4,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/remizovm/geonames/helpers"
 )
 
 const cities1000URL = `cities1000.zip`
@@ -13,22 +15,22 @@ func Cities1000() (map[int]*Feature, error) {
 	var err error
 	result := make(map[int]*Feature)
 
-	zipped, err := httpGet(geonamesURL + cities1000URL)
+	zipped, err := helpers.HTTPGet(helpers.GeonamesURL + cities1000URL)
 	if err != nil {
 		return nil, err
 	}
 
-	f, err := unzip(zipped)
+	f, err := helpers.Unzip(zipped)
 	if err != nil {
 		return nil, err
 	}
 
-	data, err := getZipData(f, "cities1000.txt")
+	data, err := helpers.GetZipData(f, "cities1000.txt")
 	if err != nil {
 		return nil, err
 	}
 
-	parse(data, 0, func(raw [][]byte) bool {
+	helpers.Parse(data, 0, func(raw [][]byte) bool {
 		if len(raw) != 19 {
 			return true
 		}
