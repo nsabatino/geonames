@@ -18,14 +18,15 @@ type TimeZone struct {
 }
 
 // TimeZones returns all time zones available
-func TimeZones(proto, domain string) ([]*TimeZone, error) {
+func TimeZones(proto, domain string) (map[string]*TimeZone, error) {
 	var err error
-	var result []*TimeZone
 
 	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, timeZonesURL))
 	if err != nil {
 		return nil, err
 	}
+
+	result := make(map[string]*TimeZone)
 
 	parse(data, 1, func(raw [][]byte) bool {
 		if len(raw) != 5 {
@@ -36,13 +37,15 @@ func TimeZones(proto, domain string) ([]*TimeZone, error) {
 		dstOffset, _ := strconv.ParseFloat(string(raw[3]), 64)
 		rawOffset, _ := strconv.ParseFloat(string(raw[4]), 64)
 
-		result = append(result, &TimeZone{
+		tzid := string(raw[1])
+
+		result[tzid] = &TimeZone{
 			CountryIso2Code: string(raw[0]),
-			TimeZoneID:      string(raw[1]),
+			TimeZoneID:      tzid,
 			GmtOffset:       time.Duration(gmtOffset) * time.Hour,
 			DstOffset:       time.Duration(dstOffset) * time.Hour,
 			RawOffset:       time.Duration(rawOffset) * time.Hour,
-		})
+		}
 
 		return true
 	})
