@@ -1,6 +1,9 @@
 package geonames
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 const countryInfoURL = "countryInfo.txt"
 
@@ -28,11 +31,11 @@ type Country struct {
 }
 
 // CountryInfo returns a map of all countries
-func CountryInfo() (map[int64]*Country, error) {
+func CountryInfo(proto, domain string) (map[int64]*Country, error) {
 	var err error
 	result := make(map[int64]*Country)
 
-	data, err := httpGet(geonamesURL + countryInfoURL)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, countryInfoURL))
 	if err != nil {
 		return nil, err
 	}

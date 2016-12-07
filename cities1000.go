@@ -1,6 +1,7 @@
 package geonames
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -9,11 +10,11 @@ import (
 const cities1000URL = `cities1000.zip`
 
 // Cities1000 returns all cities with the population >1000
-func Cities1000() (map[int]*Feature, error) {
+func Cities1000(proto, domain string) (map[int]*Feature, error) {
 	var err error
 	result := make(map[int]*Feature)
 
-	zipped, err := httpGet(geonamesURL + cities1000URL)
+	zipped, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, cities1000URL))
 	if err != nil {
 		return nil, err
 	}

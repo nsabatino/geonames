@@ -1,6 +1,9 @@
 package geonames
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 const admin1CodesASCIIURL = `admin1CodesASCII.txt`
 
@@ -13,11 +16,11 @@ type Admin1CodeASCII struct {
 }
 
 // Admin1CodesASCII returns all admin1 codes encoded in ASCII
-func Admin1CodesASCII() ([]*Admin1CodeASCII, error) {
+func Admin1CodesASCII(proto, domain string) ([]*Admin1CodeASCII, error) {
 	var err error
 	var result []*Admin1CodeASCII
 
-	data, err := httpGet(geonamesURL + admin1CodesASCIIURL)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, admin1CodesASCIIURL))
 	if err != nil {
 		return nil, err
 	}

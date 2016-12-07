@@ -1,5 +1,7 @@
 package geonames
 
+import "fmt"
+
 const languageCodesURL = `iso-languagecodes.txt`
 
 // LanguageCode represents a single language
@@ -11,11 +13,11 @@ type LanguageCode struct {
 }
 
 // LanguageCodes returns all available languages
-func LanguageCodes() ([]*LanguageCode, error) {
+func LanguageCodes(proto, domain string) ([]*LanguageCode, error) {
 	var err error
 	var result []*LanguageCode
 
-	data, err := httpGet(geonamesURL + languageCodesURL)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, languageCodesURL))
 	if err != nil {
 		return nil, err
 	}

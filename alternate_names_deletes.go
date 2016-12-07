@@ -17,11 +17,11 @@ type AlternateNameDeleteOp struct {
 }
 
 // AlternateNamesDeletes returns all deleted alternate names for the selected date
-func AlternateNamesDeletes(year, month, day int) (map[int]*AlternateNameDeleteOp, error) {
+func AlternateNamesDeletes(year, month, day int, proto, domain string) (map[int]*AlternateNameDeleteOp, error) {
 	var err error
 	uri := fmt.Sprintf(alternateNamesdeletesURL, year, month, day)
 
-	data, err := httpGet(geonamesURL + uri)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, uri))
 	if err != nil {
 		return nil, err
 	}

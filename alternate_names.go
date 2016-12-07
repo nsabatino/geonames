@@ -1,6 +1,7 @@
 package geonames
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 )
@@ -20,11 +21,11 @@ type AlternateName struct {
 }
 
 // AlternateNames returns alternate names for all features available
-func AlternateNames() ([]*AlternateName, error) {
+func AlternateNames(proto, domain string) ([]*AlternateName, error) {
 	var err error
 	var result []*AlternateName
 
-	zipped, err := httpGet(geonamesURL + alternateNamesURL)
+	zipped, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, alternateNamesURL))
 	if err != nil {
 		return nil, err
 	}

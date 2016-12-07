@@ -1,6 +1,7 @@
 package geonames
 
 import (
+	"fmt"
 	"strconv"
 	"time"
 )
@@ -17,11 +18,11 @@ type TimeZone struct {
 }
 
 // TimeZones returns all time zones available
-func TimeZones() ([]*TimeZone, error) {
+func TimeZones(proto, domain string) ([]*TimeZone, error) {
 	var err error
 	var result []*TimeZone
 
-	data, err := httpGet(geonamesURL + timeZonesURL)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, timeZonesURL))
 	if err != nil {
 		return nil, err
 	}

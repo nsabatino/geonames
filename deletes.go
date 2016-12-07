@@ -16,11 +16,11 @@ type DeleteOp struct {
 }
 
 // Deletes returns all deleted objects for the selected date
-func Deletes(year, month, day int) (map[int]*DeleteOp, error) {
+func Deletes(year, month, day int, proto, domain string) (map[int]*DeleteOp, error) {
 	var err error
 	uri := fmt.Sprintf(deletesURL, year, month, day)
 
-	data, err := httpGet(geonamesURL + uri)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, uri))
 	if err != nil {
 		return nil, err
 	}

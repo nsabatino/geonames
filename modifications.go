@@ -11,10 +11,10 @@ const modificationsPattern = `(\d{1,7})\s(.+)`
 
 // Modifications returns all modifications made at the selected date
 // WARNING: WIP
-func Modifications(year, month, day int) (map[string][]string, error) {
+func Modifications(year, month, day int, proto, domain string) (map[string][]string, error) {
 	uri := fmt.Sprintf(modificationsURL, year, month, day)
 
-	data, err := httpGet(geonamesURL + uri)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, uri))
 	if err != nil {
 		return nil, err
 	}

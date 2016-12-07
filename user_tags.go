@@ -1,6 +1,7 @@
 package geonames
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 )
@@ -8,10 +9,10 @@ import (
 const userTagsURL = `userTags.zip`
 
 // UserTags returns all available user tags for any objects of the system
-func UserTags() (map[int][]string, error) {
+func UserTags(proto, domain string) (map[int][]string, error) {
 	var err error
 
-	zipped, err := httpGet(geonamesURL + userTagsURL)
+	zipped, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, userTagsURL))
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package geonames
 
 import (
+	"fmt"
 	"log"
 	"strconv"
 )
@@ -17,11 +18,11 @@ type HierarchyNode struct {
 // Hierarchy returns all available pairs of linked parents and children
 // For example, a city is linked to it's country as a child:
 // Country->City1,City2 etc
-func Hierarchy() (map[int][]*HierarchyNode, error) {
+func Hierarchy(proto, domain string) (map[int][]*HierarchyNode, error) {
 	var err error
 	result := make(map[int][]*HierarchyNode)
 
-	zipped, err := httpGet(geonamesURL + hierarchyURL)
+	zipped, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, hierarchyURL))
 	if err != nil {
 		return nil, err
 	}

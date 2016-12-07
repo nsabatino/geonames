@@ -1,6 +1,9 @@
 package geonames
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 const admin2CodesURL = `admin2Codes.txt`
 
@@ -13,11 +16,11 @@ type Admin2Code struct {
 }
 
 // Admin2Codes returns all admin2 codes encoded in ASCII
-func Admin2Codes() ([]*Admin2Code, error) {
+func Admin2Codes(proto, domain string) ([]*Admin2Code, error) {
 	var err error
 	var result []*Admin2Code
 
-	data, err := httpGet(geonamesURL + admin2CodesURL)
+	data, err := httpGet(fmt.Sprintf("%s://%s/%s", proto, domain, admin2CodesURL))
 	if err != nil {
 		return nil, err
 	}
